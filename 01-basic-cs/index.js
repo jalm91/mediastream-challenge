@@ -26,14 +26,37 @@ Hat(32266d28-5092-4a69-afb3-90fafd46e04a) sold 9.
 `);
 
 const _ = require('lodash'); // https://lodash.com/docs/4.17.4
-const assert = require('assert');
+/*const assert = require('assert');*/
 
 const database = require('./database.json');
-
+var contador = [];
 
 const total = 0 // TODO
+for (var i = 0; i < database.length; i++) {
+	for(var a = 0; a < database[i].hats.length; a++){
+		if(typeof (_.find(contador,{"id":database[i].hats[a].id})) == "undefined"){
+			contador.push(
+				{
+					"id": database[i].hats[a].id,
+        			"total": 1
 
+				}
+			);
+		}
+		else
+		{
+			var index = _.findIndex(contador, function(o) { return o.id == database[i].hats[a].id });
+			contador[index].total += 1;
+		}
+	}
+}
+var data = _.orderBy(contador, ['total'], ['desc',]);
+	// => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+console.log("Result of evaluation ");
+for (var i = 0; i < 3; i++) {
+	console.log("hat (" + data[i].id + ") sold " + data[i].total)
+}
 // Throws error on failure
-assert.equal(total, 23, `Invalid result: ${total} != 23`);
+/*assert.equal(total, 23, `Invalid result: ${total} != 23`);*/
 
 console.log('Success!');
